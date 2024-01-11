@@ -1,6 +1,14 @@
 const usersSchema = require("../model/usersModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
+const getUsers = async (req, res, next) => {
+    try {
+        const getData = await usersSchema.find({}, { password: 0 }); // Exclude password field
+        res.status(200).json({ success: true, records: getData });
+    } catch (err) {
+        next(err);
+    }
+};
 const createUsers = async (req, res, next) => {
     try {
         const { email, password, role } = req.body;
@@ -47,5 +55,5 @@ const loginUser = async (req, res, next) => {
     }
 }
 
-module.exports = { createUsers, loginUser };
+module.exports = { createUsers, loginUser, getUsers };
 
